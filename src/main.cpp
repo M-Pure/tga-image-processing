@@ -47,62 +47,62 @@ int main() {
     text.Deserialize("input/text.tga");
     text2.Deserialize("input/text2.tga");
 
-    // Extra Credit
-    Image extraCredit;
-    car.Combine4(circles, text, pattern1, extraCredit);
-    extraCredit.Serialize("output/extracredit.tga");
-    cout << "Extra Credit: " << TestFileEquality("output/extracredit.tga", "examples/EXAMPLE_extracredit.tga") << endl;
+    // Combine 4 images
+    Image combined;
+    car.Combine4(circles, text, pattern1, combined);
+    combined.Serialize("output/combined4.tga");
+    cout << "Combine 4 images: " << TestFileEquality("output/extracredit.tga", "examples/EXAMPLE_extracredit.tga") << endl;
 
-    // Part 1
+    // Multiply layer1, pattern1
     Image part1(pattern1.GetHeader());
     pattern1.Multiply(layer1, part1);
-    part1.Serialize("output/part1.tga");
-    cout << "Part 1: " << TestFileEquality("output/part1.tga", "examples/EXAMPLE_part1.tga") << endl;
+    part1.Serialize("output/multiply.tga");
+    cout << "Multiply: " << TestFileEquality("output/multiply.tga", "examples/EXAMPLE_part1.tga") << endl;
 
-    // // Part 2
+    // Subtract car by layer2
     Image part2(car.GetHeader());
     car.Subtract(layer2, part2);
-    part2.Serialize("output/part2.tga");
-    cout << "Part 2: " << TestFileEquality("output/part2.tga", "examples/EXAMPLE_part2.tga") << endl;
+    part2.Serialize("output/subtract.tga");
+    cout << "Subtract: " << TestFileEquality("output/subtract.tga", "examples/EXAMPLE_part2.tga") << endl;
 
-    // Part 3
+    // Screen text with result of multiplying layer1 and pattern2
     Image part3_temp(pattern2.GetHeader());
     pattern2.Multiply(layer1, part3_temp);
     Image part3(pattern2.GetHeader());
     text.Screen(part3_temp, part3);
-    part3.Serialize("output/part3.tga");
-    cout << "Part 3: " << TestFileEquality("output/part3.tga", "examples/EXAMPLE_part3.tga") << endl;
+    part3.Serialize("output/screen.tga");
+    cout << "Screen: " << TestFileEquality("output/screen.tga", "examples/EXAMPLE_part3.tga") << endl;
 
-    // Part 4
+    // Subtract pattern2 from the product of layer2 and circles
     Image part4_temp(circles.GetHeader());
     circles.Multiply(layer2, part4_temp);
     Image part4(circles.GetHeader());
     part4_temp.Subtract(pattern2, part4);
-    part4.Serialize("output/part4.tga");
-    cout << "Part 4: " << TestFileEquality("output/part4.tga", "examples/EXAMPLE_part4.tga") << endl;
+    part4.Serialize("output/MulSub.tga");
+    cout << "Multiply and Subtract: " << TestFileEquality("output/MulSub.tga", "examples/EXAMPLE_part4.tga") << endl;
 
-    // Part 5
+    // Overlay layer1 with pattern1
     Image part5(pattern1.GetHeader());
     pattern1.Overlay(layer1, part5);
-    part5.Serialize("output/part5.tga");
-    cout << "Part 5: " << TestFileEquality("output/part5.tga", "examples/EXAMPLE_part5.tga") << endl;
+    part5.Serialize("output/overlay.tga");
+    cout << "Overlay: " << TestFileEquality("output/overlay.tga", "examples/EXAMPLE_part5.tga") << endl;
 
-    // Part 6
+    // Modify channel (green)
     Image part6;
     part6.Deserialize("input/car.tga");
     part6.ModifyChannel("Add", "G", 200);
-    part6.Serialize("output/part6.tga");
-    cout << "Part 6: " << TestFileEquality("output/part6.tga", "examples/EXAMPLE_part6.tga") << endl;
+    part6.Serialize("output/modifygreen.tga");
+    cout << "Modify Green Channel: " << TestFileEquality("output/modifygreen.tga", "examples/EXAMPLE_part6.tga") << endl;
 
-    // Part 7
+    // Scale Red
     Image part7;
     part7.Deserialize("input/car.tga");
     part7.ModifyChannel("Scale", "R", 4);
     part7.ModifyChannel("Scale", "B", 0);
-    part7.Serialize("output/part7.tga");
-    cout << "Part 7: " << TestFileEquality("output/part7.tga", "examples/EXAMPLE_part7.tga") << endl;
+    part7.Serialize("output/scalered.tga");
+    cout << "Scale Red Channel: " << TestFileEquality("output/part7.tga", "examples/EXAMPLE_part7.tga") << endl;
 
-    // Part 8
+    // Distribute channels to 3 images
     vector<unsigned char> carBlueChannel;
     vector<unsigned char> carGreenChannel;
     vector<unsigned char> carRedChannel;
@@ -119,15 +119,15 @@ int main() {
     part8_g.SetAllChannels(carGreenChannel);
     part8_r.SetAllChannels(carRedChannel);
 
-    part8_b.Serialize("output/part8_b.tga");
-    part8_g.Serialize("output/part8_g.tga");
-    part8_r.Serialize("output/part8_r.tga");
+    part8_b.Serialize("output/carbluechannel.tga");
+    part8_g.Serialize("output/cargreenchannel.tga");
+    part8_r.Serialize("output/carredchannel.tga");
 
-    cout << "Part 8 Blue: " << TestFileEquality("output/part8_b.tga", "examples/EXAMPLE_part8_b.tga") << endl;
-    cout << "Part 8 Green: " << TestFileEquality("output/part8_g.tga", "examples/EXAMPLE_part8_g.tga") << endl;
-    cout << "Part 8 Red: " << TestFileEquality("output/part8_r.tga", "examples/EXAMPLE_part8_r.tga") << endl;
+    cout << "Isolate car blue channel: " << TestFileEquality("output/carbluechannel.tga", "examples/EXAMPLE_part8_b.tga") << endl;
+    cout << "Isolate car green channel: " << TestFileEquality("output/cargreenchannel.tga", "examples/EXAMPLE_part8_g.tga") << endl;
+    cout << "Isolate car red channel: " << TestFileEquality("output/carredchannel.tga", "examples/EXAMPLE_part8_r.tga") << endl;
 
-    // Part 9
+    // Combine image channels
     vector<unsigned char> layer_blueChannel;
     vector<unsigned char> layer_greenChannel;
     vector<unsigned char> layer_redChannel;
@@ -141,13 +141,13 @@ int main() {
     part9.SetChannel("B", layer_blueChannel);
     part9.SetChannel("G", layer_greenChannel);
     part9.SetChannel("R", layer_redChannel);
-    part9.Serialize("output/part9.tga");
-    cout << "Part 9: " << TestFileEquality("output/part9.tga", "examples/EXAMPLE_part9.tga") << endl;
+    part9.Serialize("output/combinedchannels.tga");
+    cout << "Combining channels: " << TestFileEquality("output/combinedchannels.tga", "examples/EXAMPLE_part9.tga") << endl;
 
-    // Part 10
+    // Rotate
     text2.Flip();
-    text2.Serialize("output/part10.tga");
-    cout << "Part 10: " << TestFileEquality("output/part10.tga", "examples/EXAMPLE_part10.tga") << endl;
+    text2.Serialize("output/flipped.tga");
+    cout << "Flip: " << TestFileEquality("output/flipped.tga", "examples/EXAMPLE_part10.tga") << endl;
 
     return 0;
 
